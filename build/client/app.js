@@ -9891,7 +9891,7 @@ var SlotMachineService = function () {
 		_classCallCheck(this, SlotMachineService);
 
 		this.api = new _api2.default();
-		console.log('TTT');
+		console.log('TTTDDD');
 		this.api.get('/api/spin/result');
 	}
 
@@ -10016,37 +10016,9 @@ var ApiService = function () {
    * @memberof ApiService
    */
 		value: function get(url) {
-			// util.loadXMLRequest(url, 'GET')
-			// 	.catch(() => {
-			// 		console.log('Hello, something went wrong');
-			// 	});
-			var promise = new Promise(function (resolve, reject) {
-				var xmlhttp = new XMLHttpRequest();
-				xmlhttp.responseType = 'json';
-
-				xmlhttp.onreadystatechange = function () {
-					console.log('@@@@@@');
-					if (xmlhttp.readyState == 4) {
-						console.log('%%%%%%% ' + xmlhttp.status);
-						if (xmlhttp.status == 200) {
-							resolve(xmlhttp.response);
-						} else if (xmlhttp.status == 400) {
-							console.log('%%%% 400 %%%');
-							alert('There was an error 400');
-							reject();
-						} else {
-							console.log('%%%% dont know %%%');
-							alert('something else other than 200 was returned');
-							reject();
-						}
-					}
-				};
-
-				xmlhttp.open('GET', url, true);
-				xmlhttp.send();
+			return _util2.default.loadXMLRequest(url, 'GET').catch(function () {
+				console.log('Hello, something went wrong');
 			});
-
-			return promise;
 		}
 
 		/**
@@ -10081,33 +10053,32 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
 	loadXMLRequest: function loadXMLRequest(url, method) {
-		var promise = new Promise(function (resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.responseType = 'json';
+			xmlhttp.open(method, url, true);
 
-			xmlhttp.onreadystatechange = function () {
+			xmlhttp.onload = function () {
 				console.log('@@@@@@');
-				if (xmlhttp.readyState == 4) {
-					console.log('%%%%%%% ' + xmlhttp.status);
-					if (xmlhttp.status == 200) {
-						resolve(xmlhttp.response);
-					} else if (xmlhttp.status == 400) {
-						console.log('%%%% 400 %%%');
-						alert('There was an error 400');
-						reject();
-					} else {
-						console.log('%%%% dont know %%%');
-						alert('something else other than 200 was returned');
-						reject();
-					}
+				if (this.status >= 200 && this.status < 300) {
+					resolve(xmlhttp.response);
+				} else {
+					reject({
+						status: this.status,
+						statusText: xhr.statusText
+					});
 				}
 			};
 
-			xmlhttp.open(method, url, true);
+			xmlhttp.onerror = function () {
+				reject({
+					status: this.status,
+					statusText: xhr.statusText
+				});
+			};
+
 			xmlhttp.send();
 		});
-
-		return promise;
 	}
 };
 
