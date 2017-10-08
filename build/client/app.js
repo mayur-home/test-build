@@ -10046,6 +10046,7 @@ exports.default = {
 		return new Promise(function (resolve, reject) {
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.open(method, url, true);
+			xmlhttp.json = true;
 
 			xmlhttp.onload = function () {
 				if (this.status >= 200 && this.status < 300) {
