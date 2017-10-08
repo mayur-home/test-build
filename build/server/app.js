@@ -28827,7 +28827,6 @@ exports.default = function () {
 	var spinApi = (0, _express.Router)();
 
 	spinApi.get('/result', function (req, res) {
-		// res.contentType("text/html");
 		res.json(generateResponse());
 	});
 
