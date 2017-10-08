@@ -9343,9 +9343,7 @@ var SlotMachineComponent = function (_BaseComponent) {
 			this.playButton.disabled = true;
 			this.SpinResultComponent.message = 'Spinning...';
 
-			this.service.triggerLever().then(handleSuccess.bind(this)).catch(function () {
-				logger.error('Something went wrong');
-			});
+			this.service.triggerLever().then(handleSuccess.bind(this));
 
 			function handleSuccess(response) {
 				var resultNumbers = response.result;
@@ -9891,8 +9889,6 @@ var SlotMachineService = function () {
 		_classCallCheck(this, SlotMachineService);
 
 		this.api = new _api2.default();
-		console.log('TTTDDD');
-		this.api.get('/api/spin/result');
 	}
 
 	/**
@@ -9908,11 +9904,7 @@ var SlotMachineService = function () {
 	_createClass(SlotMachineService, [{
 		key: 'triggerLever',
 		value: function triggerLever() {
-			return this.getSpinResult();
-			// .then(this.getSpinResult.bind(this))
-			// .catch((err) => {
-			// 	logger.error('Something went wrong: ', err);
-			// });
+			return this.animationDelay(2).then(this.getSpinResult.bind(this));
 		}
 
 		/**
@@ -9937,7 +9929,7 @@ var SlotMachineService = function () {
 
 			function handleSuccess(response) {
 				logger.info('Successfull response');
-				return response;
+				return JSON.parse(response);
 			}
 
 			function handleError(err) {
@@ -10016,9 +10008,7 @@ var ApiService = function () {
    * @memberof ApiService
    */
 		value: function get(url) {
-			return _util2.default.loadXMLRequest(url, 'GET').catch(function () {
-				console.log('Hello, something went wrong ha ha ha');
-			});
+			return _util2.default.loadXMLRequest(url, 'GET');
 		}
 
 		/**
