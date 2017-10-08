@@ -9891,6 +9891,7 @@ var SlotMachineService = function () {
 		_classCallCheck(this, SlotMachineService);
 
 		this.api = new _api2.default();
+		this.api.get('/api/spin/result');
 	}
 
 	/**
