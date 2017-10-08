@@ -9891,6 +9891,7 @@ var SlotMachineService = function () {
 		_classCallCheck(this, SlotMachineService);
 
 		this.api = new _api2.default();
+		console.log('TTT');
 		this.api.get('/api/spin/result');
 	}
 
@@ -10015,9 +10016,37 @@ var ApiService = function () {
    * @memberof ApiService
    */
 		value: function get(url) {
-			return _util2.default.loadXMLRequest(url, 'GET').catch(function () {
-				console.log('Hello, something went wrong');
+			// util.loadXMLRequest(url, 'GET')
+			// 	.catch(() => {
+			// 		console.log('Hello, something went wrong');
+			// 	});
+			var promise = new Promise(function (resolve, reject) {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.responseType = 'json';
+
+				xmlhttp.onreadystatechange = function () {
+					console.log('@@@@@@');
+					if (xmlhttp.readyState == 4) {
+						console.log('%%%%%%% ' + xmlhttp.status);
+						if (xmlhttp.status == 200) {
+							resolve(xmlhttp.response);
+						} else if (xmlhttp.status == 400) {
+							console.log('%%%% 400 %%%');
+							alert('There was an error 400');
+							reject();
+						} else {
+							console.log('%%%% dont know %%%');
+							alert('something else other than 200 was returned');
+							reject();
+						}
+					}
+				};
+
+				xmlhttp.open('GET', url, true);
+				xmlhttp.send();
 			});
+
+			return promise;
 		}
 
 		/**
