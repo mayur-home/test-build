@@ -9904,7 +9904,9 @@ var SlotMachineService = function () {
 	_createClass(SlotMachineService, [{
 		key: 'triggerLever',
 		value: function triggerLever() {
-			return this.animationDelay(2).then(this.getSpinResult.bind(this));
+			return this.animationDelay(2).then(this.getSpinResult.bind(this)).catch(function (err) {
+				logger.error('Something went wrong: ', err);
+			});
 		}
 
 		/**
@@ -9933,7 +9935,7 @@ var SlotMachineService = function () {
 			}
 
 			function handleError(err) {
-				logger.error('Some thing went wrong: ', err);
+				logger.error('Something went wrong: ', err);
 			}
 		}
 
