@@ -102,16 +102,13 @@ exports.default = BaseComponent;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Loading styles
-
-
-// Loading global services
-
-
-// Load slot machine game component
-
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 __webpack_require__(3);
+
+var _base = __webpack_require__(0);
+
+var _base2 = _interopRequireDefault(_base);
 
 var _logger = __webpack_require__(4);
 
@@ -125,31 +122,61 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var App = function () {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // import styles
+
+
+// import Base component
+
+
+// import global services
+
+
+// import slot machine game component
+
+
+/**
+ * @description main application component which loads game in DOM.
+ * internally instantiate game (= SlotMachineComponent)
+ * and render it on HTML.
+ *
+ * @class App
+ */
+var App = function (_BaseComponent) {
+	_inherits(App, _BaseComponent);
+
 	function App() {
 		_classCallCheck(this, App);
 
-		this.game = new _slotMachine2.default();
+		// instantiate game component
+		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, 'app'));
+		// call super to instantiate element with `app` tag name
+
+
+		_this.game = new _slotMachine2.default();
+		return _this;
 	}
 
 	_createClass(App, [{
 		key: 'render',
 		value: function render() {
-			this.element = document.createElement('app');
 			this.element.appendChild(this.game.element);
 
+			// write application on DOM
 			document.body.appendChild(this.element);
 		}
 	}]);
 
 	return App;
-}();
+}(_base2.default);
 
 // instantiate client global services
 
 
 global.logger = new _logger2.default();
 
+// instantiate main App component and render it on DOM
 new App().render();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
@@ -201,6 +228,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * @description logger service to serve application logs
+ * can be information, warning or error
+ *
+ * @export
+ * @class LoggerService
+ */
 var LoggerService = function () {
 	function LoggerService() {
 		_classCallCheck(this, LoggerService);
@@ -208,17 +242,43 @@ var LoggerService = function () {
 
 	_createClass(LoggerService, [{
 		key: 'info',
+
+		/**
+   * @description serves application information logs
+   *
+   * @function info
+   * @param {any} message
+   * @memberof LoggerService
+   */
 		value: function info(message) {
 			console.log('[Info] :', message);
 		}
+
+		/**
+   * @description serves application warning logs
+   *
+   * @function warning
+   * @param {any} message
+   * @memberof LoggerService
+   */
+
 	}, {
 		key: 'warning',
-		value: function warning() {
+		value: function warning(message) {
 			console.log('[Warning] :', message);
 		}
+
+		/**
+   * @description serves application error logs
+   *
+   * @function error
+   * @param {any} message
+   * @memberof LoggerService
+   */
+
 	}, {
 		key: 'error',
-		value: function error() {
+		value: function error(message) {
 			console.log('[Error] :', message);
 		}
 	}]);
@@ -253,9 +313,9 @@ var _spinResult = __webpack_require__(8);
 
 var _spinResult2 = _interopRequireDefault(_spinResult);
 
-var _playButtonContainer = __webpack_require__(9);
+var _playButton = __webpack_require__(9);
 
-var _playButtonContainer2 = _interopRequireDefault(_playButtonContainer);
+var _playButton2 = _interopRequireDefault(_playButton);
 
 var _bonusIndicator = __webpack_require__(10);
 
@@ -297,11 +357,14 @@ var SlotMachineComponent = function (_BaseComponent) {
 
 		_this.reelAssembly = new _reelAssembly2.default();
 		_this.SpinResultComponent = new _spinResult2.default();
-		_this.playButtonContainer = new _playButtonContainer2.default();
+		_this.PlayButtonComponent = new _playButton2.default();
 		_this.bounsIndicator = new _bonusIndicator2.default();
 
 		// instantiate local service
 		_this.service = new _slotMachine2.default();
+
+		// generate direct reference to playbutton element
+		_this.playButton = _this.PlayButtonComponent.element;
 
 		// render slot machine view
 		_this.render();
@@ -330,7 +393,7 @@ var SlotMachineComponent = function (_BaseComponent) {
 		value: function appendChildElements() {
 			this.element.appendChild(this.SpinResultComponent.element);
 			this.element.appendChild(this.reelAssembly.element);
-			this.element.appendChild(this.playButtonContainer.element);
+			this.element.appendChild(this.PlayButtonComponent.element);
 			this.element.appendChild(this.bounsIndicator.element);
 		}
 
@@ -344,8 +407,6 @@ var SlotMachineComponent = function (_BaseComponent) {
 	}, {
 		key: 'bindEvents',
 		value: function bindEvents() {
-			this.playButton = this.playButtonContainer.element.children.namedItem('playbutton');
-
 			// spin the reels on click of `playButton`
 			this.playButton.onclick = this.spinReels.bind(this);
 		}
@@ -360,7 +421,7 @@ var SlotMachineComponent = function (_BaseComponent) {
 	}, {
 		key: 'spinReels',
 		value: function spinReels() {
-			this.playButton.setAttribute('disabled', true);
+			this.playButton.disabled = true;
 			this.SpinResultComponent.message = 'Spinning...';
 
 			this.service.triggerLever().then(handleSuccess.bind(this));
@@ -373,7 +434,7 @@ var SlotMachineComponent = function (_BaseComponent) {
 				this.reelAssembly.resetReels(resultNumbers);
 				this.SpinResultComponent.message = winType;
 
-				hasBonus ? this.triggerBonus() : this.playButton.removeAttribute('disabled');
+				hasBonus ? this.triggerBonus() : this.playButton.disabled = false;
 			}
 		}
 
@@ -428,6 +489,15 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+/**
+ * @description reel assembly, its a row containing three reels.
+ * it's an important part of application and responsible to display
+ * graphical representation of spin result
+ *
+ * @export
+ * @class ReelAssemblyComponent
+ * @extends {BaseComponent}
+ */
 var ReelAssemblyComponent = function (_BaseComponent) {
 	_inherits(ReelAssemblyComponent, _BaseComponent);
 
@@ -438,9 +508,12 @@ var ReelAssemblyComponent = function (_BaseComponent) {
 		// this is 3 reel machine. if slot machine is 5 reel type then
 		// instantiate assembly with 5 reels
 		var _this = _possibleConstructorReturn(this, (ReelAssemblyComponent.__proto__ || Object.getPrototypeOf(ReelAssemblyComponent)).call(this, 'game-reel-assembly'));
+		// call super to instantiate element with `game-reel-assembly` tag name
+
 
 		_this.reels = [new _reel2.default(), new _reel2.default(), new _reel2.default()];
 
+		// render inner HTML of component
 		_this.render();
 		return _this;
 	}
@@ -482,7 +555,7 @@ var ReelAssemblyComponent = function (_BaseComponent) {
    * from server
    *
    * @function resetReels
-   * @param {any} result array of random numbers generated by api
+   * @param {array} result array of random numbers generated by api
    * @memberof ReelAssemblyComponent
    */
 
@@ -551,13 +624,24 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+/**
+ * @description single reel component, which will be
+ * instantiated by reel assembly
+ *
+ * @export
+ * @class ReelComponent
+ * @extends {BaseComponent}
+ */
 var ReelComponent = function (_BaseComponent) {
 	_inherits(ReelComponent, _BaseComponent);
 
 	function ReelComponent() {
 		_classCallCheck(this, ReelComponent);
 
+		// render changes in component HTML
 		var _this = _possibleConstructorReturn(this, (ReelComponent.__proto__ || Object.getPrototypeOf(ReelComponent)).call(this, 'game-reel'));
+		// call super to instantiate element with `game-reel` tag name
+
 
 		_this.render();
 		return _this;
@@ -566,8 +650,8 @@ var ReelComponent = function (_BaseComponent) {
 	_createClass(ReelComponent, [{
 		key: 'render',
 		value: function render() {
-			// initialize reel with `no-symbol` class
-			this.element.className = 'no-symbol';
+			// initialize reel with `no-graphic` class
+			this.element.className = 'no-graphic';
 		}
 
 		////////////////////
@@ -618,13 +702,23 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+/**
+ * @description to display misc status messages - primarily spin result
+ *
+ * @export
+ * @class SpinResultComponent
+ * @extends {BaseComponent}
+ */
 var SpinResultComponent = function (_BaseComponent) {
 	_inherits(SpinResultComponent, _BaseComponent);
 
 	function SpinResultComponent() {
 		_classCallCheck(this, SpinResultComponent);
 
+		// render inner HTML
 		var _this = _possibleConstructorReturn(this, (SpinResultComponent.__proto__ || Object.getPrototypeOf(SpinResultComponent)).call(this, 'spin-result'));
+		// call super to instantiate element with `spin-result` tag name
+
 
 		_this.render();
 		return _this;
@@ -637,6 +731,11 @@ var SpinResultComponent = function (_BaseComponent) {
 		}
 
 		////////////////////
+
+		/**
+   * @description setter method for message property
+   * @memberof SpinResultComponent
+   */
 
 	}, {
 		key: 'message',
@@ -675,35 +774,41 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var PlayButtonContainerComponent = function (_BaseComponent) {
-	_inherits(PlayButtonContainerComponent, _BaseComponent);
+/**
+ * @description contains play button
+ *
+ * @export
+ * @class PlayButtonComponent
+ * @extends {BaseComponent}
+ */
+var PlayButtonComponent = function (_BaseComponent) {
+	_inherits(PlayButtonComponent, _BaseComponent);
 
-	function PlayButtonContainerComponent() {
-		_classCallCheck(this, PlayButtonContainerComponent);
+	function PlayButtonComponent() {
+		_classCallCheck(this, PlayButtonComponent);
 
-		var _this = _possibleConstructorReturn(this, (PlayButtonContainerComponent.__proto__ || Object.getPrototypeOf(PlayButtonContainerComponent)).call(this, 'play-button-container'));
+		// render inner HTML of component (here play button)
+		var _this = _possibleConstructorReturn(this, (PlayButtonComponent.__proto__ || Object.getPrototypeOf(PlayButtonComponent)).call(this, 'button'));
+		// call super to instantiate `button` tag
+
 
 		_this.render();
 		return _this;
 	}
 
-	_createClass(PlayButtonContainerComponent, [{
+	_createClass(PlayButtonComponent, [{
 		key: 'render',
 		value: function render() {
-			// craete a button element and set type and name attributes
-			var playButton = document.createElement('button');
-			playButton.type = 'button';
-			playButton.name = 'playbutton';
-
-			// append button to `play-button-container`
-			this.element.appendChild(playButton);
+			// set `type` and `name` to button
+			this.element.type = 'button';
+			this.element.name = 'playbutton';
 		}
 	}]);
 
-	return PlayButtonContainerComponent;
+	return PlayButtonComponent;
 }(_base2.default);
 
-exports.default = PlayButtonContainerComponent;
+exports.default = PlayButtonComponent;
 
 /***/ }),
 /* 10 */
@@ -730,13 +835,24 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+/**
+ * @description indicator component which will be desplaed on DOM
+ * whenever bonus received
+ *
+ * @export
+ * @class BounsIndicatorComponent
+ * @extends {BaseComponent}
+ */
 var BounsIndicatorComponent = function (_BaseComponent) {
 	_inherits(BounsIndicatorComponent, _BaseComponent);
 
 	function BounsIndicatorComponent() {
 		_classCallCheck(this, BounsIndicatorComponent);
 
+		// render inner HTML of component
 		var _this = _possibleConstructorReturn(this, (BounsIndicatorComponent.__proto__ || Object.getPrototypeOf(BounsIndicatorComponent)).call(this, 'bonus-indicator'));
+		// call super to instantiate element with `bonus-indicator` tag name
+
 
 		_this.render();
 		return _this;
@@ -745,17 +861,31 @@ var BounsIndicatorComponent = function (_BaseComponent) {
 	_createClass(BounsIndicatorComponent, [{
 		key: 'render',
 		value: function render() {
+			// declaration of child elements
 			var title = document.createElement('h2');
 			var message = document.createElement('p');
 
+			// set `title` and `messgae` to be displayed on indicator
 			title.textContent = 'You got the Bonus!';
 			message.textContent = 'Free spin for you. Next spin is bonus for you and will ' + 'be triggered automatically. Have a fun!!!';
 
+			// load component with child elements
 			this.element.appendChild(title);
 			this.element.appendChild(message);
 		}
 
 		////////////////////
+
+		/**
+   * @description trigger bonus which displays bonus indicator for
+   * a while(currently 5sec) and then hide. This function returns a promise
+   * with delay of 5 sec, because we want to give user enough time to read
+   * a message/instruction on screen
+   *
+   * @function trigger
+   * @returns {promise} indicator show promise
+   * @memberof BounsIndicatorComponent
+   */
 
 	}, {
 		key: 'trigger',
@@ -772,15 +902,33 @@ var BounsIndicatorComponent = function (_BaseComponent) {
 
 			return indicatorShowPromise;
 		}
+
+		/**
+   * @description adds `show` class to bonus indicator
+   * to make it visible on DOM
+   *
+   * @function show
+   * @memberof BounsIndicatorComponent
+   */
+
 	}, {
 		key: 'show',
 		value: function show() {
 			this.element.className = 'show';
 		}
+
+		/**
+   * @description adds `hide` class to bonus indicator
+   * to make it hide it from DOM
+   *
+   * @function hide
+   * @memberof BounsIndicatorComponent
+   */
+
 	}, {
 		key: 'hide',
 		value: function hide() {
-			this.element.removeAttribute('class');
+			this.element.className = 'hide';
 		}
 	}]);
 
@@ -825,16 +973,11 @@ var SlotMachineService = function () {
 	}
 
 	/**
-  * @description makes API call to server to fetch spin result.
-  * result would be in below format:
-  * {
-  * 	"result": array of randomNumbers,
-  * 	"isBonus": true/false,
-  * 	"winType": (Big Win | Small Win | No Win)
-  * }
+  * @description apply delay (to have feeling like user is
+  * waiting for result) and then collect result from server
   *
   * @function triggerLever
-  * @returns {promise} get result API response
+  * @returns {promise} spin result API response
   * @memberof SlotMachineService
   */
 
@@ -844,6 +987,22 @@ var SlotMachineService = function () {
 		value: function triggerLever() {
 			return this.animationDelay(2).then(this.getSpinResult.bind(this));
 		}
+
+		/**
+   * @description makes API call to server to fetch spin result.
+   * result would be in below format:
+   * {
+   *  "result": array of randomNumbers,
+   *  "isBonus": true/false,
+   *  "winType": (Big Win | Small Win | No Win)
+   * }
+   *
+   * @private
+   * @function getSpinResult
+   * @returns {promise} spin result API response
+   * @memberof SlotMachineService
+   */
+
 	}, {
 		key: 'getSpinResult',
 		value: function getSpinResult() {
@@ -858,6 +1017,17 @@ var SlotMachineService = function () {
 				logger.error('Some thing went wrong: ', err);
 			}
 		}
+
+		/**
+   * @description provide delay for given seconds
+   *
+   * @private
+   * @function animationDelay
+   * @param {number} delayInSecond second
+   * @returns {promise} delay
+   * @memberof SlotMachineService
+   */
+
 	}, {
 		key: 'animationDelay',
 		value: function animationDelay(delayInSecond) {
@@ -889,8 +1059,21 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _util = __webpack_require__(13);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * @description contains shorthand methods for
+ * REST calls from client
+ *
+ * @export
+ * @class ApiService
+ */
 var ApiService = function () {
 	function ApiService() {
 		_classCallCheck(this, ApiService);
@@ -898,35 +1081,29 @@ var ApiService = function () {
 
 	_createClass(ApiService, [{
 		key: 'get',
+
+		/**
+   * @function get
+   * @param {string} url
+   * @returns {promise}
+   * @memberof ApiService
+   */
 		value: function get(url) {
-			return this.loadXMLRequest(url);
+			return _util2.default.loadXMLRequest(url, 'GET');
 		}
+
+		/**
+   * @function post
+   * @param {any} url
+   * @param {any} params
+   * @returns {promise} - TODO: not yet developed as not required for demo
+   * @memberof ApiService
+   */
+
 	}, {
-		key: 'loadXMLRequest',
-		value: function loadXMLRequest(url) {
-			var promise = new Promise(function (resolve, reject) {
-				var xmlhttp = new XMLHttpRequest();
-				xmlhttp.responseType = 'json';
-
-				xmlhttp.onreadystatechange = function () {
-					if (xmlhttp.readyState == XMLHttpRequest.DONE) {
-						if (xmlhttp.status == 200) {
-							resolve(xmlhttp.response);
-						} else if (xmlhttp.status == 400) {
-							alert('There was an error 400');
-							reject();
-						} else {
-							alert('something else other than 200 was returned');
-							reject();
-						}
-					}
-				};
-
-				xmlhttp.open("GET", url, true);
-				xmlhttp.send();
-			});
-
-			return promise;
+		key: 'post',
+		value: function post(url, params) {
+			// post request handling will go here
 		}
 	}]);
 
@@ -934,6 +1111,44 @@ var ApiService = function () {
 }();
 
 exports.default = ApiService;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	loadXMLRequest: function loadXMLRequest(url, method) {
+		var promise = new Promise(function (resolve, reject) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.responseType = 'json';
+
+			xmlhttp.onreadystatechange = function () {
+				if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+					if (xmlhttp.status == 200) {
+						resolve(xmlhttp.response);
+					} else if (xmlhttp.status == 400) {
+						alert('There was an error 400');
+						reject();
+					} else {
+						alert('something else other than 200 was returned');
+						reject();
+					}
+				}
+			};
+
+			xmlhttp.open(method, url, true);
+			xmlhttp.send();
+		});
+
+		return promise;
+	}
+};
 
 /***/ })
 /******/ ]);
