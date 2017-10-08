@@ -10058,6 +10058,7 @@ exports.default = {
 			console.log('@@@ %%%%%%%% @@@');
 			console.log(XMLHttpRequest);
 			var xmlhttp = new XMLHttpRequest();
+			console.log('@@@ QQQQQQ @@@');
 			xmlhttp.responseType = 'json';
 			console.log('@@@ FFFFFF @@@');
 			xmlhttp.open(method, url, true);
