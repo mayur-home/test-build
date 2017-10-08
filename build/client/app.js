@@ -10017,7 +10017,7 @@ var ApiService = function () {
    */
 		value: function get(url) {
 			return _util2.default.loadXMLRequest(url, 'GET').catch(function () {
-				console.log('Hello, something went wrong');
+				console.log('Hello, something went wrong ha ha ha');
 			});
 		}
 
@@ -10053,7 +10053,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
 	loadXMLRequest: function loadXMLRequest(url, method) {
+		console.log('@@@ $$$$$$$$ @@@');
 		return new Promise(function (resolve, reject) {
+			console.log('@@@ %%%%%%%% @@@');
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.responseType = 'json';
 			xmlhttp.open(method, url, true);
