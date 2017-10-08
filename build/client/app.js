@@ -9343,7 +9343,9 @@ var SlotMachineComponent = function (_BaseComponent) {
 			this.playButton.disabled = true;
 			this.SpinResultComponent.message = 'Spinning...';
 
-			this.service.triggerLever().then(handleSuccess.bind(this));
+			this.service.triggerLever().then(handleSuccess.bind(this)).catch(function () {
+				logger.error('Something went wrong');
+			});
 
 			function handleSuccess(response) {
 				var resultNumbers = response.result;
@@ -9904,9 +9906,11 @@ var SlotMachineService = function () {
 	_createClass(SlotMachineService, [{
 		key: 'triggerLever',
 		value: function triggerLever() {
-			return this.animationDelay(2).then(this.getSpinResult.bind(this)).catch(function (err) {
-				logger.error('Something went wrong: ', err);
-			});
+			return this.getSpinResult();
+			// .then(this.getSpinResult.bind(this))
+			// .catch((err) => {
+			// 	logger.error('Something went wrong: ', err);
+			// });
 		}
 
 		/**
