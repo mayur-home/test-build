@@ -10056,9 +10056,12 @@ exports.default = {
 		console.log('@@@ $$$$$$$$ @@@');
 		return new Promise(function (resolve, reject) {
 			console.log('@@@ %%%%%%%% @@@');
+			console.log(XMLHttpRequest);
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.responseType = 'json';
+			console.log('@@@ FFFFFF @@@');
 			xmlhttp.open(method, url, true);
+			console.log('@@@ LLLLLL @@@');
 
 			xmlhttp.onload = function () {
 				console.log('@@@@@@');
