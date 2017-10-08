@@ -9929,7 +9929,7 @@ var SlotMachineService = function () {
 
 			function handleSuccess(response) {
 				logger.info('Successfull response');
-				return response;
+				return JSON.parse(response);
 			}
 
 			function handleError(err) {
@@ -10050,20 +10050,20 @@ exports.default = {
 			xmlhttp.json = true;
 
 			xmlhttp.onload = function () {
-				if (undefined.status == 200) {
-					resolve(undefined.response);
+				if (this.status == 200) {
+					resolve(this.response);
 				} else {
 					reject({
-						status: undefined.status,
-						statusText: undefined.statusText
+						status: this.status,
+						statusText: this.statusText
 					});
 				}
 			};
 
 			xmlhttp.onerror = function () {
 				reject({
-					status: undefined.status,
-					statusText: undefined.statusText
+					status: this.status,
+					statusText: this.statusText
 				});
 			};
 
