@@ -10057,13 +10057,17 @@ exports.default = {
 			xmlhttp.responseType = 'json';
 
 			xmlhttp.onreadystatechange = function () {
-				if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+				console.log('@@@@@@');
+				if (xmlhttp.readyState == 4) {
+					console.log('%%%%%%% ' + xmlhttp.status);
 					if (xmlhttp.status == 200) {
 						resolve(xmlhttp.response);
 					} else if (xmlhttp.status == 400) {
+						console.log('%%%% 400 %%%');
 						alert('There was an error 400');
 						reject();
 					} else {
+						console.log('%%%% dont know %%%');
 						alert('something else other than 200 was returned');
 						reject();
 					}
