@@ -10015,7 +10015,9 @@ var ApiService = function () {
    * @memberof ApiService
    */
 		value: function get(url) {
-			return _util2.default.loadXMLRequest(url, 'GET');
+			return _util2.default.loadXMLRequest(url, 'GET').catch(function () {
+				console.log('Hello, something went wrong');
+			});
 		}
 
 		/**
