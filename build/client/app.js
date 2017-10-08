@@ -9925,7 +9925,7 @@ var SlotMachineService = function () {
 	}, {
 		key: 'getSpinResult',
 		value: function getSpinResult() {
-			return this.api.get('/api/spin/result').then(handleSuccess.bind(this)).catch(handleError);
+			return this.api.get('/api/spin/result?ie=' + Math.random()).then(handleSuccess.bind(this)).catch(handleError);
 
 			function handleSuccess(response) {
 				logger.info('Successfull response');
@@ -10043,25 +10043,17 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
 	loadXMLRequest: function loadXMLRequest(url, method) {
-		console.log('@@@ $$$$$$$$ @@@');
 		return new Promise(function (resolve, reject) {
-			console.log('@@@ %%%%%%%% @@@');
-			console.log(XMLHttpRequest);
 			var xmlhttp = new XMLHttpRequest();
-			console.log('@@@ QQQQQQ @@@');
-			// xmlhttp.responseType = 'json';
-			console.log('@@@ FFFFFF @@@');
 			xmlhttp.open(method, url, true);
-			console.log('@@@ LLLLLL @@@');
 
 			xmlhttp.onload = function () {
-				console.log('@@@@@@');
 				if (this.status >= 200 && this.status < 300) {
-					resolve(xmlhttp.response);
+					resolve(this.response);
 				} else {
 					reject({
 						status: this.status,
-						statusText: xhr.statusText
+						statusText: this.statusText
 					});
 				}
 			};
@@ -10069,7 +10061,7 @@ exports.default = {
 			xmlhttp.onerror = function () {
 				reject({
 					status: this.status,
-					statusText: xhr.statusText
+					statusText: this.statusText
 				});
 			};
 
